@@ -4,9 +4,6 @@ GitHub Issue: #
 <!-- Please check one or more that apply to this PR. -->
 
  - [ ] Bug fix
- - [ ] Feature
- - [ ] Code style update (formatting)
- - [ ] Refactoring (no functional changes, no api changes)
  - [ ] Build or CI related changes
  - [ ] Documentation content changes
  - [ ] Other, please describe:
@@ -16,22 +13,10 @@ GitHub Issue: #
 <!-- (Please describe the changes that this PR introduces.) -->
 
 
-## Impact on version
-<!-- Please select one or more based on your commits. -->
-
-- [ ] **Major**
-  - The template structure was changed.
-- [ ] **Minor**
-  - New functionalities were added.
-- [ ] **Patch**
-  - A bug in behavior was fixed.
-  - Documentation was changed.
-
 ## PR Checklist 
 
 ### Always applicable
 No matter your changes, these checks always apply.
-- [ ] Your conventional commits are aligned with the **Impact on version** section.
 - [ ] Updated [CHANGELOG.md](../CHANGELOG.md).
   - Use the latest Major.Minor.X header if you do a **Patch** change.
   - Create a new Major.Minor.X header if you do a **Minor** or **Major** change.
