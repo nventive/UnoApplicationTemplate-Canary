@@ -1,12 +1,11 @@
 GitHub Issue: #
 
 ## Proposed Changes
-<!-- Please check one or more that apply to this PR. -->
+<!-- This repo is the Canary from the UnoApplicationTemplate project
+    so all PRs should be fixing bugs and not be about adding new features.
+    Please check one or more that apply to this PR. -->
 
  - [ ] Bug fix
- - [ ] Feature
- - [ ] Code style update (formatting)
- - [ ] Refactoring (no functional changes, no api changes)
  - [ ] Build or CI related changes
  - [ ] Documentation content changes
  - [ ] Other, please describe:
@@ -17,7 +16,8 @@ GitHub Issue: #
 
 
 ## Impact on version
-<!-- Please select one or more based on your commits. -->
+<!-- What would be the impact on the version if these changes would be merged back into the main repository?
+    Please select one or more based on your commits. -->
 
 - [ ] **Major**
   - The template structure was changed.
