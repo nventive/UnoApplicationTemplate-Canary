@@ -31,9 +31,9 @@
   InternalKeystore: com.nventive.internal.applicationtemplate.jks # This is the internal keystore used for internal builds.
   GooglePlayKeystore: com.nventive.applicationtemplate.jks # This is the official keystore used for Google Play.
   # iOS
-  InternalProvisioningProfile: com.nventive.applicationtemplate.mobileprovision # This is the internal provisioning profile for internal builds.
+  InternalProvisioningProfile: com.nventive.applicationtemplate.canary.mobileprovision # This is the internal provisioning profile for internal builds.
   InternalCertificate: nventive.p12 # This is the certificate from the nventive Apple account used to sign internal builds.
-  AppStoreProvisioningProfile: com.nventive.applicationtemplate.mobileprovision # This is the client provisioning profile for the AppStore (Production distribution).
+  AppStoreProvisioningProfile: com.nventive.applicationtemplate.canary.mobileprovision # This is the client provisioning profile for the AppStore (Production distribution).
   AppStoreCertificate: nventive.p12 # This is the client production certificate used to sign AppStore builds.
 
   # Prerequisites - Service connections
