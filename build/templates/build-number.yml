@@ -1,0 +1,10 @@
+﻿steps:
+  - task: PowerShell@2
+    displayName: Set the build version
+    inputs:
+      targetType: inline
+      script: |
+        $buildNumber = [int]$(Build.BuildId)
+
+        Write-Host "##vso[task.setvariable variable=BuildNumber]$buildNumber"
+        Write-Host "Build number: $BuildNumber"
