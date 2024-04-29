@@ -32,6 +32,8 @@ steps:
 
 - template: templates/gitversion.yml
 
+- template: templates/build-number.yml
+
 - task: InstallAppleCertificate@2
   displayName: Install Certificate
   inputs:

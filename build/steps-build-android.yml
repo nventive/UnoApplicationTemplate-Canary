@@ -23,6 +23,8 @@ steps:
 
 - template: templates/gitversion.yml
 
+- template: templates/build-number.yml
+
 - task: DownloadSecureFile@1
   name: keyStore
   displayName: "Download Keystore from Secure Files"
