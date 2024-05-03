@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ApplicationTemplate.DataAccess;
+using Chinook.BackButtonManager;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -21,6 +25,7 @@ public class FunctionalTestBase : IAsyncLifetime
 {
 	private readonly ITestOutputHelper _output;
 	private readonly CoreStartup _coreStartup;
+	private readonly FunctionalTestBackButtonSource _backButtonSource = new();
 	private readonly Lazy<ShellViewModel> _shellViewModel = new Lazy<ShellViewModel>(() => new ShellViewModel());
 
 	/// <summary>
@@ -36,6 +41,8 @@ public class FunctionalTestBase : IAsyncLifetime
 		_coreStartup = new CoreStartup();
 		_coreStartup.PreInitialize();
 		_coreStartup.Initialize(contentRootPath: string.Empty, settingsFolderPath: string.Empty, environmentManager: new TestEnvironmentManager(), ConfigureLogging, Configure);
+
+		_coreStartup.ServiceProvider.GetRequiredService<IBackButtonManager>().AddSource(_backButtonSource);
 
 		void Configure(IHostBuilder hostBuilder)
 		{
@@ -115,6 +122,38 @@ public class FunctionalTestBase : IAsyncLifetime
 	}
 
 	/// <summary>
+	/// Simulates the back button press.
+	/// </summary>
+	public void NavigateBackUsingHardwareButton()
+	{
+		_backButtonSource.RaiseBackRequested();
+	}
+
+	/// <summary>
+	/// Waits for navigation out of or to a specific ViewModel type to be completed.
+	/// This is for when you cannot let the test continue until the navigation is completed.
+	/// It should be used when you know that the navigation is going to happen.
+	/// </summary>
+	/// <param name="viewModelType">The type of viewmodel we are navigating to or from.</param>
+	/// <param name="isDestination">Whether the viewmodel is the destination or the origin.</param>
+	protected async Task WaitForNavigation(Type viewModelType, bool isDestination)
+	{
+		var sectionNavigator = GetService<ISectionsNavigator>();
+
+		var timeoutTask = Task.Delay(1000);
+
+		// Waits for the navigation to be completed, we need the StartWith in case the navigation already finished before we started observing.
+		var navTask = sectionNavigator.ObserveCurrentState()
+			.StartWith(sectionNavigator.State)
+			.Where(x => x.LastRequestState != NavigatorRequestState.Processing
+				&& (x.GetCurrentOrNextViewModelType() == viewModelType) == isDestination)
+			// The CancellationToken is so that this returns a task.
+			.FirstAsync(CancellationToken.None);
+
+		await Task.WhenAny(navTask, timeoutTask);
+	}
+
+	/// <summary>
 	/// Configures the services required for functional testing.
 	/// </summary>
 	/// <param name="host">The host builder.</param>
@@ -156,6 +195,22 @@ public class FunctionalTestBase : IAsyncLifetime
 	}
 
 	/// <summary>
+	/// Replaces the registration for type <typeparamref name="TService"/> with a mocked implementation.
+	/// </summary>
+	/// <typeparam name="TService">The type of service.</typeparam>
+	/// <param name="services">The service collection.</param>
+	/// <param name="mockedService">The mocked Service.</param>
+	/// <returns>the registered services.</returns>
+	protected virtual IServiceCollection ReplaceWithMock<TService>(IServiceCollection services, out TService mockedService)
+		 where TService : class
+	{
+		mockedService = Substitute.For<TService>();
+
+		return services.Replace(ServiceDescriptor.Singleton<TService>(mockedService));
+	}
+
+
+	/// <summary>
 	/// Gets the application settings to use for this test.
 	/// </summary>
 	public virtual ApplicationSettings ApplicationSettings { get; } = ApplicationSettings.Default;
@@ -181,5 +236,22 @@ public class FunctionalTestBase : IAsyncLifetime
 	async Task IAsyncLifetime.DisposeAsync()
 	{
 		_coreStartup.Dispose();
+	}
+
+	private sealed class FunctionalTestBackButtonSource : IBackButtonSource
+	{
+		public string Name => "FunctionalTestBackButtonSource";
+
+		public event BackRequestedEventHandler BackRequested;
+
+		public void Dispose()
+		{
+			BackRequested = null;
+		}
+
+		public void RaiseBackRequested()
+		{
+			BackRequested?.Invoke(this, new BackRequestedEventArgs());
+		}
 	}
 }
