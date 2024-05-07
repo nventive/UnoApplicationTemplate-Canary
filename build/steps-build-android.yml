@@ -42,7 +42,7 @@ steps:
   displayName: "Bump Android Manifest Version"
   inputs:
     sourcePath: ${{ parameters.pathToAndroidManifest }}
-    versionCode: $(PreReleaseNumber)
+    versionCode: $(BuildNumber)
     versionName: $(MajorMinorPatch)
     printFile: true
 

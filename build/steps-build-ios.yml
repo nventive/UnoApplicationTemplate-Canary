@@ -54,7 +54,7 @@ steps:
   inputs:
     infoPlistPath: ${{ parameters.pathToInfoPlist }}
     bundleShortVersionString: $(MajorMinorPatch)
-    bundleVersion: $(PreReleaseNumber)
+    bundleVersion: $(BuildNumber)
 
 - task: ios-bundle-identifier@1
   displayName: "Replace iOS Bundle Identifier"
