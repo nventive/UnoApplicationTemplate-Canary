@@ -51,10 +51,8 @@
 		<array>
 			<string>mailto</string>
 		</array>
-		<!--
-		Adjust this to your application's encryption usage.
+		<!-- Adjust this to your application's encryption usage. -->
 		<key>ITSAppUsesNonExemptEncryption</key>
 		<false/>
-		-->
 	</dict>
 </plist>
