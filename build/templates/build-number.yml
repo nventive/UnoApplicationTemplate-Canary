@@ -4,10 +4,7 @@
     inputs:
       targetType: inline
       script: |
-        # Get the current date and time in 'yyyyMMddHHmm' format
-        $dateTime = Get-Date -Format "yyyyMMddHHmm"
-
-        $buildNumber = $dateTime
+        $buildNumber = [int]$(Build.BuildId)
 
         Write-Host "##vso[task.setvariable variable=BuildNumber]$buildNumber"
         Write-Host "Build number: $BuildNumber"
