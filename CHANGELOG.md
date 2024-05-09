@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
 Prefix your items with `(Template)` if the change is about the template and not the resulting application.
 
+## 3.4.X
+- Added a kill switch feature to the app.
+- Bump Uno.WinUI, Uno.WinUI.DevServer, Uno.WinUI.Lottie and Uno.UI.Adapter.Microsoft.Extensions.Logging to 5.0.159 to fix backNavigation/CloseModal crash.
+
+## 3.3.X
+- Added a forced update feature to the app.
+
 ## 3.2.X
 - Added support for mouse back button navigation.
 - Set `fetchDepth` to 0 on canary merge CI to avoid `refusing to merge unrelated histories` errors.
