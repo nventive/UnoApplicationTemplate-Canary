@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<LangVersion>12.0</LangVersion>
 		<OutputType>WinExe</OutputType>
@@ -70,7 +70,7 @@
 	<ItemGroup>
 		<PackageReference Include="Chinook.BackButtonManager.Uno.WinUI" Version="2.1.0" />
 		<PackageReference Include="Chinook.DataLoader.Uno.WinUI" Version="2.0.0" />
-		<PackageReference Include="Chinook.DynamicMvvm.Uno.WinUI" Version="2.1.0" />
+		<PackageReference Include="Chinook.DynamicMvvm.Uno.WinUI" Version="2.1.1" />
 		<PackageReference Include="Chinook.SectionsNavigation.Uno.WinUI" Version="3.0.2" />
 		<PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
 		<PackageReference Include="ExtendedSplashScreen.Uno.WinUI" Version="2.0.0" />
@@ -84,10 +84,10 @@
 		<PackageReference Include="Nventive.View.Uno.WinUI" Version="0.6.0" />
 		<PackageReference Include="Reactive.Annex.Uno.WinUI" Version="2.0.0" />
 		<PackageReference Include="ReviewService.NativePrompters" Version="1.0.0" />
-		<PackageReference Include="Uno.Core.Extensions.Logging.Singleton" Version="4.0.1" />
+		<PackageReference Include="Uno.Core.Extensions.Logging.Singleton" Version="4.1.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-		<PackageReference Include="Uno.Material.WinUI" Version="5.0.13" />
-		<PackageReference Include="Uno.Toolkit.WinUI.Material" Version="6.0.18" />
+		<PackageReference Include="Uno.Material.WinUI" Version="5.4.0-dev.10" />
+		<PackageReference Include="Uno.Toolkit.WinUI.Material" Version="6.4.0-dev.48" />
 	</ItemGroup>
 
 	<ItemGroup>
