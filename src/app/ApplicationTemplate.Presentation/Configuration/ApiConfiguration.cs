@@ -42,6 +42,8 @@ public static class ApiConfiguration
 			.AddAuthentication()
 			.AddPosts(configuration)
 			.AddUserProfile()
+			.AddMinimumVersion()
+			.AddKillSwitch()
 			.AddDadJokes(configuration);
 
 		return services;
@@ -51,6 +53,18 @@ public static class ApiConfiguration
 	{
 		// This one doesn't have an actual remote API yet. It's always a mock implementation.
 		return services.AddSingleton<IUserProfileRepository, UserProfileRepositoryMock>();
+	}
+
+	private static IServiceCollection AddMinimumVersion(this IServiceCollection services)
+	{
+		// This one doesn't have an actual remote API yet. It's always a mock implementation.
+		return services.AddSingleton<IMinimumVersionReposiory, MinimumVersionRepositoryMock>();
+	}
+
+	private static IServiceCollection AddKillSwitch(this IServiceCollection services)
+	{
+		// This one doesn't have an actual remote API yet. It's always a mock implementation.
+		return services.AddSingleton<IKillSwitchRepository, KillSwitchRepositoryMock>();
 	}
 
 	private static IServiceCollection AddAuthentication(this IServiceCollection services)
