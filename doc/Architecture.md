@@ -36,7 +36,7 @@ The application solution is divided in 3 main areas.
   The other layers are `.Net Standard 2.0` libraries that are platform agnostic.
 
 ### Access (DAL)
-The _data access layer_ is where you would put external dependencies such as API clients and local storage.
+The _data access layer_ is where you would put external dependencies such as API clients, local storage and native platform access.
 Classes providing data should be suffixed with `Repository`.
 This is where you put serializable entities.
 The associated `csproj` is named `Access` (and not `DataAccess`) so that it shows as the first element alphabetically.
@@ -139,6 +139,14 @@ Business services are always declared using an interface and implemented in a se
 
 This application uses [DynamicData](https://github.com/reactivemarbles/DynamicData) to expose observable lists from business services. These can then be used in the presentation layer to create ViewModels that are automatically disposed when their associated items are removed from the list.
 
+### Forced Update
+
+This application uses the [IUpdateRequiredService](../src/app/ApplicationTemplate.Business/ForcedUpdates/IUpdateRequiredService.cs) which exposes an event that allows you to know when you should redirect the user to a page that will lead him to the appstore where he can update the app. 
+
+### Kill Switch
+
+This application uses the [IKillSwitchService](../src/app/ApplicationTemplate.Business/KillSwitch/IKillSwitchService.cs) which exposes an event that allows you to know when you the Kill switch is activated and when it gets deactivated.
+
 ## Presentation
 
 ### MVVM - ViewModels
@@ -177,7 +185,7 @@ This application uses [FluentValidation](https://www.nuget.org/packages/FluentVa
 See [Validation.md](Validation.md) for more details.
 
 ### Analytics
-This application has a built-in analytics base that can be used to track events and errors with potentially any analytics service (e.g. AppCenter, Firebase, Segment, etc.). This base is built around the [IAnalyticsSink](../src/app/ApplicationTemplate.Presentation/Framework/Analytics/IAnalyticsSink.cs) interface.
+This application has a built-in analytics base that can be used to track events and errors with potentially any analytics service (e.g. Firebase, Segment, etc.). This base is built around the [IAnalyticsSink](../src/app/ApplicationTemplate.Presentation/Framework/Analytics/IAnalyticsSink.cs) interface.
 
 See [DefaultAnalytics.md](DefaultAnalytics.md) for more details.
 

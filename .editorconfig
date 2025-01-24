@@ -275,6 +275,8 @@ dotnet_diagnostic.CA1065.severity = none
 dotnet_diagnostic.CA1303.severity = none
 # IDE0047:Remove unnecessary parentheses
 dotnet_diagnostic.IDE0047.severity = suggestion
+# IDE0130: Namespace does not match folder structure
+dotnet_diagnostic.IDE0130.severity = none
 # CA1056:Uri properties should not be strings
 dotnet_diagnostic.CA1056.severity = suggestion
 # CA1819:Properties should not return arrays
@@ -391,6 +393,8 @@ dotnet_diagnostic.SA1210.severity = suggestion
 dotnet_diagnostic.CA1308.severity = none
 # CS1587: XML comment is not placed on a valid language element
 dotnet_diagnostic.CS1587.severity = none
+# CA1859: Use concrete types when possible for improved performance
+dotnet_diagnostic.CA1859.severity = none
 
 # VSTHRD110: This one is bugged: https://github.com/microsoft/vs-threading/issues/899
 dotnet_diagnostic.VSTHRD110.severity = none
