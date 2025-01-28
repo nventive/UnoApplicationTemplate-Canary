@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<LangVersion>12.0</LangVersion>
-		<TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
+		<LangVersion>13.0</LangVersion>
+		<TargetFrameworks>net9.0-android35.0;net9.0-ios</TargetFrameworks>
 		<SingleProject>true</SingleProject>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<OutputType>Exe</OutputType>
 		<IsUnoHead>true</IsUnoHead>
-		<SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net8.0-android'">29.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net8.0-ios'">14.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net9.0-android35.0'">29.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net9.0-ios'">14.2</SupportedOSPlatformVersion>
 		<NoWarn>Uno0001</NoWarn>
 	</PropertyGroup>
 	<!-- Linker configuration. -->
@@ -18,25 +18,24 @@
 	<ItemGroup>
 		<PackageReference Include="Chinook.BackButtonManager.Uno.WinUI" Version="2.1.0" />
 		<PackageReference Include="Chinook.DataLoader.Uno.WinUI" Version="2.0.0" />
-		<PackageReference Include="Chinook.DynamicMvvm.Uno.WinUI" Version="2.1.0" />
+		<PackageReference Include="Chinook.DynamicMvvm.Uno.WinUI" Version="2.1.1" />
 		<PackageReference Include="Chinook.SectionsNavigation.Uno.WinUI" Version="3.0.2" />
 		<PackageReference Include="ExtendedSplashScreen.Uno.WinUI" Version="2.0.0" />
 		<PackageReference Include="MessageDialogService.Uno.WinUI" Version="2.0.0" />
-		<PackageReference Include="Microsoft.Maui.Essentials" Version="8.0.3" />
+		<PackageReference Include="Microsoft.Maui.Essentials" Version="9.0.30" />
 		<PackageReference Include="Nventive.Persistence.Uno.WinUI" Version="0.5.0" />
 		<PackageReference Include="Nventive.View.Uno.WinUI" Version="0.6.0" />
 		<PackageReference Include="Reactive.Annex.Uno.WinUI" Version="2.0.0" />
 		<PackageReference Include="ReviewService.NativePrompters" Version="1.0.0" />
 		<PackageReference Include="Uno.CommunityToolkit.WinUI" Version="7.1.200" />
-		<PackageReference Include="Uno.Material.WinUI" Version="4.2.0-dev.18" />
+		<PackageReference Include="Uno.Material.WinUI" Version="5.0.13" />
 		<PackageReference Include="Uno.Microsoft.Xaml.Behaviors.Interactivity.WinUI" Version="2.4.2" />
 		<PackageReference Include="Uno.Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.4.2" />
-		<PackageReference Include="Uno.Themes.WinUI" Version="4.2.0-dev.18" />
-		<PackageReference Include="Uno.Toolkit.WinUI.Material" Version="5.2.0-dev.32" />
-		<PackageReference Include="Uno.WinUI" Version="5.2.0-dev.1012" />
-		<PackageReference Include="Uno.WinUI.DevServer" Version="5.2.0-dev.1012" Condition="'$(Configuration)'=='Debug'" />
-		<PackageReference Include="Uno.WinUI.Lottie" Version="5.2.0-dev.1012" />
-		<PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="5.2.0-dev.1016" />
+		<PackageReference Include="Uno.Toolkit.WinUI.Material" Version="6.0.18" />
+		<PackageReference Include="Uno.WinUI" Version="5.2.121" />
+		<PackageReference Include="Uno.WinUI.DevServer" Version="5.2.121" Condition="'$(Configuration)'=='Debug'" />
+		<PackageReference Include="Uno.WinUI.Lottie" Version="5.2.121" />
+		<PackageReference Include="Uno.UI.Adapter.Microsoft.Extensions.Logging" Version="5.2.121" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 		<PackageReference Include="Serilog.Sinks.Xamarin" Version="1.0.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
@@ -47,7 +46,7 @@
 		<ProjectReference Include="..\ApplicationTemplate.Presentation\ApplicationTemplate.Presentation.csproj" />
 	</ItemGroup>
 	<Choose>
-		<When Condition="'$(TargetFramework)'=='net8.0-android'">
+		<When Condition="'$(TargetFramework)'=='net9.0-android35.0'">
 			<PropertyGroup>
 				<AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 				<BundleAssemblies>False</BundleAssemblies>
@@ -55,6 +54,7 @@
 			<Choose>
 				<When Condition="'$(Configuration)'=='Debug'">
 					<PropertyGroup>
+						<RuntimeIdentifiers>android-arm;android-arm64;android-x86;android-x64</RuntimeIdentifiers>
 						<AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
 						<UseHighDPIResources>False</UseHighDPIResources>
 						<EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
@@ -101,7 +101,7 @@
 			<ItemGroup>
 				<PackageReference Include="Uno.UniversalImageLoader" Version="1.9.36" />
 				<PackageReference Include="Mono.AotProfiler.Android" Version="7.0.0" />
-				<PackageReference Include="Xamarin.Kotlin.StdLib.Jdk8" Version="1.9.0.1" />
+				<PackageReference Include="Xamarin.Kotlin.StdLib.Jdk8" Version="1.9.23.1" />
 			</ItemGroup>
 			<ItemGroup>
 				<AndroidAotProfile Include="custom.aprof" />
@@ -142,7 +142,7 @@
 				</AndroidResource>
 			</ItemGroup>
 		</When>
-		<When Condition="'$(TargetFramework)'=='net8.0-ios'">
+		<When Condition="'$(TargetFramework)'=='net9.0-ios'">
 			<PropertyGroup>
 				<MtouchExtraArgs>$(MtouchExtraArgs) --setenv=MONO_GC_PARAMS=soft-heap-limit=512m,nursery-size=64m,evacuation-threshold=66,major=marksweep,concurrent-sweep</MtouchExtraArgs>
 				<MtouchExtraArgs>$(MtouchExtraArgs) --xml=./iOS/LinkerExclusions.xml --linkskip=$(AssemblyName)</MtouchExtraArgs>
@@ -157,6 +157,7 @@
 			<Choose>
 				<When Condition="'$(Configuration)'=='Debug'">
 					<PropertyGroup>
+						<ProvisioningType>manual</ProvisioningType>
 						<MtouchDebug>True</MtouchDebug>
 						<MtouchExtraArgs>$(MtouchExtraArgs) --setenv=MONO_LOG_LEVEL=debug --setenv=MONO_LOG_MASK=gc</MtouchExtraArgs>
 						<Optimize>False</Optimize>
@@ -200,7 +201,7 @@
 				</When>
 			</Choose>
 			<ItemGroup>
-				<PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.8.0-dev.1" />
+				<PackageReference Include="Uno.Extensions.Logging.OSLog" Version="1.7.0" />
 			</ItemGroup>
 			<ItemGroup>
 				<TrimmerRootDescriptor Include="iOS\LinkerExclusions.xml" />
