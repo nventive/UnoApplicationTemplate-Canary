@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ApplicationTemplate.Business;
+using ApplicationTemplate.DataAccess;
 using Chinook.DataLoader;
 using Chinook.DynamicMvvm;
 using Chinook.SectionsNavigation;
@@ -14,7 +15,7 @@ using Uno;
 
 namespace ApplicationTemplate.Presentation;
 
-public partial class DadJokesPageViewModel : ViewModel
+public sealed partial class DadJokesPageViewModel : ViewModel
 {
 	[Inject] private IDadJokesService _dadJokesService;
 	[Inject] private ISectionsNavigator _sectionsNavigator;
@@ -27,7 +28,7 @@ public partial class DadJokesPageViewModel : ViewModel
 	public IDataLoader<DadJokesItemViewModel[]> Jokes => this.GetDataLoader(LoadJokes, b => b
 		// Dispose the previous ItemViewModels when Quotes produces new values.
 		.DisposePreviousData()
-		.TriggerOnNetworkReconnection(this.GetService<IConnectivityProvider>())
+		.TriggerOnNetworkReconnection(this.GetService<IConnectivityRepository>())
 		.TriggerFromObservable(this.GetService<IDadJokesService>().GetAndObservePostTypeFilter().Skip(1))
 	);
 
@@ -67,7 +68,7 @@ public partial class DadJokesPageViewModel : ViewModel
 		void UpdateItemViewModels(IChangeSet<DadJokesQuote> changeSet)
 		{
 			var quotesVMs = Jokes.State.Data;
-			if (quotesVMs != null && quotesVMs.Any())
+			if (quotesVMs != null && quotesVMs.Length != 0)
 			{
 				var addedItems = changeSet.GetAddedItems();
 				var removedItems = changeSet.GetRemovedItems();
