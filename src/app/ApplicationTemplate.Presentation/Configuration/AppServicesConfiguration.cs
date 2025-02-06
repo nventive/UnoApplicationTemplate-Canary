@@ -2,7 +2,6 @@
 using ApplicationTemplate.Business;
 using ApplicationTemplate.DataAccess;
 using ApplicationTemplate.Presentation;
-using ApplicationTemplate.Presentation.Framework.Connectivity;
 using MessageDialogService;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,13 +23,15 @@ public static class AppServicesConfiguration
 	{
 		return services
 			.AddSingleton<IMessageDialogService, AcceptOrDefaultMessageDialogService>()
-			.AddSingleton<IConnectivityProvider, MockedConnectivityProvider>()
+			.AddSingleton<IConnectivityRepository, MockedConnectivityRepository>()
 			.AddSingleton<IBackgroundScheduler>(s => TaskPoolScheduler.Default.ToBackgroundScheduler())
 			.AddSingleton<IApplicationSettingsRepository, ApplicationSettingsRepository>()
 			.AddSingleton<IPostService, PostService>()
 			.AddSingleton<IDadJokesService, DadJokesService>()
 			.AddSingleton<IAuthenticationService, AuthenticationService>()
 			.AddSingleton<IUserProfileService, UserProfileService>()
+			.AddSingleton<IUpdateRequiredService, UpdateRequiredService>()
+			.AddSingleton<IKillSwitchService, KillSwitchService>()
 			.AddSingleton<DiagnosticsCountersService>();
 	}
 }
