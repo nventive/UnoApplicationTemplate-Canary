@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using ApplicationTemplate.Business;
 using ApplicationTemplate.DataAccess;
+using ApplicationTemplate.DataAccess.PlatformServices;
 using MallardMessageHandlers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +30,7 @@ public static class ApiConfiguration
 	{
 		// TODO: Configure your HTTP clients here.
 
-		// For example purpose: the following line loads the DadJokesRepository configuration section and make IOptions<DadJokesApiClientOptions> available for DI.
+		// For example purpose: the following line loads the DadJokesRepository configuration section and makes IOptions<DadJokesApiClientOptions> available for DI.
 		services.BindOptionsToConfiguration<DadJokesApiClientOptions>(configuration);
 
 		services
@@ -42,6 +43,8 @@ public static class ApiConfiguration
 			.AddAuthentication()
 			.AddPosts(configuration)
 			.AddUserProfile()
+			.AddMinimumVersion()
+			.AddKillSwitch()
 			.AddDadJokes(configuration);
 
 		return services;
@@ -53,10 +56,22 @@ public static class ApiConfiguration
 		return services.AddSingleton<IUserProfileRepository, UserProfileRepositoryMock>();
 	}
 
+	private static IServiceCollection AddMinimumVersion(this IServiceCollection services)
+	{
+		// This one doesn't have an actual remote API yet. It's always a mock implementation.
+		return services.AddSingleton<IMinimumVersionProvider, MinimumVersionProviderMock>();
+	}
+
+	private static IServiceCollection AddKillSwitch(this IServiceCollection services)
+	{
+		// This one doesn't have an actual remote API yet. It's always a mock implementation.
+		return services.AddSingleton<IKillSwitchDataSource, KillSwitchDataSourceMock>();
+	}
+
 	private static IServiceCollection AddAuthentication(this IServiceCollection services)
 	{
 		// This one doesn't have an actual remote API yet. It's always a mock implementation.
-		return services.AddSingleton<IAuthenticationRepository, AuthenticationRepositoryMock>();
+		return services.AddSingleton<IAuthenticationApiClient, AuthenticationApiClientMock>();
 	}
 
 	private static IServiceCollection AddPosts(this IServiceCollection services, IConfiguration configuration)
@@ -75,7 +90,7 @@ public static class ApiConfiguration
 
 	private static IServiceCollection AddDadJokes(this IServiceCollection services, IConfiguration configuration)
 	{
-		return services.AddApiClient<IDadJokesRepository, DadJokesRepositoryMock>(configuration, "DadJokesApiClient");
+		return services.AddApiClient<IDadJokesApiClient, DadJokesApiClientMock>(configuration, "DadJokesApiClient");
 	}
 
 	private static IServiceCollection AddApiClient<TInterface, TMock>(
@@ -129,7 +144,7 @@ public static class ApiConfiguration
 	{
 		return services
 			.AddSingleton<INetworkAvailabilityChecker>(s =>
-					new NetworkAvailabilityChecker(ct => Task.FromResult(s.GetRequiredService<IConnectivityProvider>().NetworkAccess is NetworkAccess.Internet))
+					new NetworkAvailabilityChecker(ct => Task.FromResult(s.GetRequiredService<IConnectivityProvider>().State is ConnectivityState.Internet))
 			)
 			.AddTransient<NetworkExceptionHandler>();
 	}
@@ -159,12 +174,17 @@ public static class ApiConfiguration
 	/// </summary>
 	/// <typeparam name="T">The type of the Refit interface.</typeparam>
 	/// <param name="services">The service collection.</param>
-	/// <param name="settings">Optional. The settings to configure the instance with.</param>
+	/// <param name="settingsProvider">Optional. The function to provide customized RefitSettings.</param>
 	/// <returns>The updated IHttpClientBuilder.</returns>
-	private static IHttpClientBuilder AddRefitHttpClient<T>(this IServiceCollection services, Func<IServiceProvider, RefitSettings> settings = null)
+	private static IHttpClientBuilder AddRefitHttpClient<T>(this IServiceCollection services, Func<IServiceProvider, RefitSettings> settingsProvider = null)
 		where T : class
 	{
-		services.AddSingleton(serviceProvider => RequestBuilder.ForType<T>(settings?.Invoke(serviceProvider)));
+		services.AddSingleton(serviceProvider =>
+		{
+			var settings = settingsProvider?.Invoke(serviceProvider) ?? new RefitSettings();
+			settings.ContentSerializer = serviceProvider.GetRequiredService<IHttpContentSerializer>();
+			return RequestBuilder.ForType<T>(settings);
+		});
 
 		return services
 			.AddHttpClient(typeof(T).FullName)
