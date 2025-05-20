@@ -1,4 +1,4 @@
-# Azure Pipelines
+﻿# Azure Pipelines
 
 ## Pipeline Code
 This project uses CI/CD pipelines that are implemented as yaml code.
@@ -18,7 +18,7 @@ These pipelines rely on a few variable groups and secrets in order to fully work
 
 At high level, the CI/CD pipelines do the following:
 - **Build** the app in **staging**.
-  - **Deploy** the staging app (to AppCenter and/or TestFlight and GooglePlay).
+  - **Deploy** the staging app (to Firebase app distribution, TestFlight and Google Play).
 - **Build** the app in **production**.
   - **Deploy** the production app (to TestFlight and GooglePlay).
 
@@ -68,8 +68,8 @@ This is where the exact build steps are defined. These vary depending on the pla
 
 The release stages are even more straigtforward than the build ones. One thing to note is that, for the same reason as it is done at the end of the build steps, a clean-up step is included in every stage.
 
-### AppCenter Release Stage ([stage-release-appcenter.yml](../build/stage-release-appcenter.yml))
-This stage is in charge of pushing the application to AppCenter. It's divided into 2 jobs, one for each platform.
+### Firebase app distribution Release Stage ([stage-release-firebase-app-distribution.yml](../build/stage-release-firebase-app-distribution.yml))
+This stage is in charge of pushing the application to Firebase app distribution. Only for Android.
 
 ### Apple AppStore Release Stage ([stage-release-appstore.yml](../build/stage-release-appstore.yml))
 This stage is in charge of pushing the iOS version to the Apple AppStore. Given that the build stage signs the application, this is as simple as using the proper task and pushing the **IPA** file. This should only be run for configurations that properly sign the application.
@@ -81,7 +81,8 @@ Similar to the App Store stage, this stage pushes the **AAB** produced by the bu
 This pipeline is in charge of running all tests, including the API integration tests.
 It runs all the tests and merges their coverage results into one file to have a better idea of the overall coverage.
 
-The API integration tests are the ones defined in the Functional Tests project.
+The API integration tests are the ones defined in the Api Tests project.
+It's also possible to run the functional tests with real APIs instead of mocked ones.
 Their configuration is simply changed so that they use real endpoint implementations instead of mocked implementations.
 This is done by setting the environment variable `USE_REAL_APIS` to `true`.
 
