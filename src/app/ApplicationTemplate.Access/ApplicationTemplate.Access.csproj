@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
@@ -28,8 +28,8 @@
 		<PackageReference Include="ReviewService.Abstractions" Version="1.0.0" />
 		<PackageReference Include="System.Text.Json" Version="9.0.3" />
 		<PackageReference Include="MallardMessageHandlers" Version="2.0.0" />
-		<PackageReference Include="Nventive.Persistence.Reactive" Version="0.5.0" />
-		<PackageReference Include="Nventive.Persistence" Version="0.5.0" />
+		<PackageReference Include="Nventive.Persistence.Reactive" Version="0.5.1-dev.57" />
+		<PackageReference Include="Nventive.Persistence" Version="0.5.1-dev.57" />
 		<PackageReference Include="System.Reactive" Version="6.0.1" />
 	</ItemGroup>
 </Project>
