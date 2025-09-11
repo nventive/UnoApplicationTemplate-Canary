@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<LangVersion>13.0</LangVersion>
 		<OutputType>WinExe</OutputType>
@@ -69,7 +69,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Chinook.BackButtonManager.Uno.WinUI" Version="3.0.1" />
-		<PackageReference Include="Chinook.DataLoader.Uno.WinUI" Version="3.0.1" />
+		<PackageReference Include="Chinook.DataLoader.Uno.WinUI" Version="3.0.2" />
 		<PackageReference Include="Chinook.DynamicMvvm.Uno.WinUI" Version="3.0.1" />
 		<PackageReference Include="Chinook.SectionsNavigation.Uno.WinUI" Version="4.0.1" />
 		<PackageReference Include="CommunityToolkit.WinUI" Version="7.1.2" />
@@ -81,14 +81,14 @@
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.3" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
-		<PackageReference Include="Nventive.Persistence.Uno.WinUI" Version="0.5.1-dev.57" />
+		<PackageReference Include="Nventive.Persistence.Uno.WinUI" Version="0.6.0-dev.59" />
 		<PackageReference Include="Nventive.View.Uno.WinUI" Version="0.7.0-dev.88" />
 		<PackageReference Include="Reactive.Annex.Uno.WinUI" Version="2.0.1" />
-		<PackageReference Include="ReviewService.NativePrompters" Version="1.0.0" />
+		<PackageReference Include="ReviewService.NativePrompters" Version="2.0.0" />
 		<PackageReference Include="Uno.Core.Extensions.Logging.Singleton" Version="4.1.1" />
 		<PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
-		<PackageReference Include="Uno.Material.WinUI" Version="5.4.0" />
-		<PackageReference Include="Uno.Toolkit.WinUI.Material" Version="6.4.3" />
+		<PackageReference Include="Uno.Material.WinUI" Version="5.8.0-dev.2" />
+		<PackageReference Include="Uno.Toolkit.WinUI.Material" Version="8.3.0-dev.1" />
 
 		<!-- It would normally be a transitive dependency, however, the version included with one of the packages has a vulnerability. -->
 		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
