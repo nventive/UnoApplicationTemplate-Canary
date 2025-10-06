@@ -1,17 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using Chinook.DynamicMvvm;
+﻿using Chinook.DynamicMvvm;
 using Chinook.SectionsNavigation;
 using Chinook.StackNavigation;
 using Uno;
 
 namespace ApplicationTemplate.Presentation;
 
-public sealed partial class DiagnosticsPageViewModel : ViewModel
+public sealed class DiagnosticsPageViewModel : ViewModel
 {
-	[Inject] private IEnvironmentManager _environmentManager;
+	private readonly IEnvironmentManager _environmentManager;
+
+	public DiagnosticsPageViewModel()
+	{
+		ResolveService(out _environmentManager);
+	}
 
 	public IViewModel SummaryDiagnostics => this.GetChild<SummaryDiagnosticsViewModel>();
 
