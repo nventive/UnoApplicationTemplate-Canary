@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Concurrency;
+using ApplicationTemplate.DataAccess.PlatformServices;
 using Chinook.DynamicMvvm;
 using MessageDialogService;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,7 @@ public static class ViewServicesConfiguration
 			.AddSingleton<IDiagnosticsService, DiagnosticsService>()
 			.AddSingleton<ILauncherService>(s => new LauncherService(s.GetRequiredService<DispatcherQueue>()))
 			.AddSingleton<IVersionProvider, VersionProvider>()
+			.AddSingleton<IAppStoreUriProvider, AppStoreUriProvider>()
 			.AddSingleton<IDeviceInformationProvider, DeviceInformationProvider>()
 			.AddSingleton<IExtendedSplashscreenController, ExtendedSplashscreenController>(s => new ExtendedSplashscreenController(Shell.Instance.DispatcherQueue))
 			.AddSingleton<IConnectivityProvider, ConnectivityProvider>()
