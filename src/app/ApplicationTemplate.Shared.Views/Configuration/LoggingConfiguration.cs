@@ -37,9 +37,17 @@ public static class LoggingConfiguration
 			AddConsoleLogging(serilogConfiguration);
 		}
 
+		var filepath = logFilesProvider.GetLogFilePath(isAppLogging);
+
 		if (options.IsFileLoggingEnabled)
 		{
-			AddFileLogging(serilogConfiguration, logFilesProvider.GetLogFilePath(isAppLogging));
+			AddFileLogging(serilogConfiguration, filepath);
+		}
+		else
+		{
+			// Ensures the directory is created so we can still write on files down the line.
+			var directoryPath = Path.GetDirectoryName(filepath);
+			Directory.CreateDirectory(directoryPath);
 		}
 
 		var logger = serilogConfiguration.CreateLogger();
@@ -53,9 +61,11 @@ public static class LoggingConfiguration
 		loggingBuilder.AddSerilog(logger);
 		loggingBuilder.Services.AddSingleton<ILogFilesProvider>(logFilesProvider);
 
+//-:cnd:noEmit
 #if __ANDROID__ || __IOS__
 		global::Uno.UI.Adapter.Microsoft.Extensions.Logging.LoggingAdapter.Initialize();
 #endif
+//+:cnd:noEmit
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "False positive: These are message template. The brackets are expected.")]
