@@ -21,12 +21,12 @@ public static class LocalizationConfiguration
 {
 	private static ThreadCultureOverrideService _cultureOverrideService;
 
-	private static CultureInfo[] SupportedCultures { get; } = new CultureInfo[]
-	{
+	private static CultureInfo[] SupportedCultures { get; } =
+	[
 		// TODO: Set your supported cultures here.
 		new CultureInfo("en-CA"),
 		new CultureInfo("fr-CA"),
-	};
+	];
 
 	/// <summary>
 	/// Adds the localization services to the <see cref="IServiceCollection"/>.
@@ -75,7 +75,7 @@ public static class LocalizationConfiguration
 		var folderPath = string.Empty;
 //-:cnd:noEmit
 #endif
-//+:cnd:noEmit
+		//+:cnd:noEmit
 
 		return Path.Combine(folderPath, "culture-override");
 	}
@@ -109,10 +109,7 @@ public class ResourceLoaderStringLocalizer : IStringLocalizer
 
 	private LocalizedString GetLocalizedString(string name, params object[] arguments)
 	{
-		if (name is null)
-		{
-			throw new ArgumentNullException(nameof(name));
-		}
+		ArgumentNullException.ThrowIfNull(name);
 
 		var resource = _resourceLoader.GetString(name);
 
@@ -125,7 +122,7 @@ public class ResourceLoaderStringLocalizer : IStringLocalizer
 
 		resource ??= name;
 
-		var value = arguments.Any()
+		var value = arguments.Length != 0
 			? string.Format(CultureInfo.CurrentCulture, resource, arguments)
 			: resource;
 
@@ -173,7 +170,19 @@ public class ThreadCultureOverrideService : IThreadCultureOverrideService
 	{
 		try
 		{
+//-:cnd:noEmit
+#if ANDROID
+//+:cnd:noEmit
+			// We need a special case for Android because the CurrentCulture does not return the correct value after changing the device language.
+			var locale = Java.Util.Locale.Default; // Gets the real system language
+			var culture = new CultureInfo(locale.ToString());
+//-:cnd:noEmit
+#else
+//+:cnd:noEmit
 			var culture = CultureInfo.CurrentCulture;
+//-:cnd:noEmit
+#endif
+//+:cnd:noEmit
 
 			// Use the settings culture if it is set.
 			var settingsCulture = GetCulture();
@@ -224,14 +233,9 @@ public class ThreadCultureOverrideService : IThreadCultureOverrideService
 	/// <inheritdoc/>
 	public void SetCulture(CultureInfo culture)
 	{
-		if (culture is null)
-		{
-			throw new ArgumentNullException(nameof(culture));
-		}
+		ArgumentNullException.ThrowIfNull(culture);
 
-		using (var writer = File.CreateText(_settingFilePath))
-		{
-			writer.Write(culture.Name);
-		}
+		using var writer = File.CreateText(_settingFilePath);
+		writer.Write(culture.Name);
 	}
 }
