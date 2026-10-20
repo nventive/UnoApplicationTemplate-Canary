@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ApplicationTemplate.DataAccess;
 using Chinook.DynamicMvvm;
 using Chinook.SectionsNavigation;
 using Uno;
 
 namespace ApplicationTemplate.Presentation;
 
-public sealed partial class NavigationDebuggerViewModel : TabViewModel
+public sealed class NavigationDebuggerViewModel : TabViewModel
 {
-	[Inject] private ISectionsNavigator _sectionsNavigator;
+	private readonly ISectionsNavigator _sectionsNavigator;
 
 	public NavigationDebuggerViewModel()
 	{
+		ResolveService(out _sectionsNavigator);
+
 		Title = "Navigation";
 	}
 
@@ -38,5 +41,26 @@ public sealed partial class NavigationDebuggerViewModel : TabViewModel
 	public IDynamicCommand Reinitialize => this.GetCommandFromTask(async ct =>
 	{
 		await CoreStartup.ExecuteInitialNavigation(ct, ServiceProvider);
+	});
+
+	/// <summary>
+	/// Gets a command that raises the event that triggers the navigation to the force update page.
+	/// </summary>
+	public IDynamicCommand NavigateToForceUpdatePage => this.GetCommand(() =>
+	{
+		this.GetService<IMinimumVersionProvider>().CheckMinimumVersion();
+	});
+
+	/// <summary>
+	/// Gets a command that raises the kill switch event.
+	/// </summary>
+	public IDynamicCommand TriggerKillSwitch => this.GetCommand(() =>
+	{
+		var killSwitchDataSource = this.GetService<IKillSwitchDataSource>();
+
+		if (killSwitchDataSource is KillSwitchDataSourceMock killSwitchDataSourceMock)
+		{
+			killSwitchDataSourceMock.ChangeKillSwitchActivation();
+		}
 	});
 }
