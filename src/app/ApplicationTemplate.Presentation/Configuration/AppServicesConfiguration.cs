@@ -1,8 +1,8 @@
-﻿using System.Reactive.Concurrency;
+﻿using System;
+using System.Reactive.Concurrency;
 using ApplicationTemplate.Business;
 using ApplicationTemplate.DataAccess;
 using ApplicationTemplate.Presentation;
-using ApplicationTemplate.Presentation.Framework.Connectivity;
 using MessageDialogService;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,14 +23,16 @@ public static class AppServicesConfiguration
 	public static IServiceCollection AddAppServices(this IServiceCollection services)
 	{
 		return services
+			.AddSingleton<TimeProvider>(TimeProvider.System)
 			.AddSingleton<IMessageDialogService, AcceptOrDefaultMessageDialogService>()
-			.AddSingleton<IConnectivityProvider, MockedConnectivityProvider>()
 			.AddSingleton<IBackgroundScheduler>(s => TaskPoolScheduler.Default.ToBackgroundScheduler())
 			.AddSingleton<IApplicationSettingsRepository, ApplicationSettingsRepository>()
 			.AddSingleton<IPostService, PostService>()
 			.AddSingleton<IDadJokesService, DadJokesService>()
 			.AddSingleton<IAuthenticationService, AuthenticationService>()
 			.AddSingleton<IUserProfileService, UserProfileService>()
+			.AddSingleton<IUpdateRequiredService, UpdateRequiredService>()
+			.AddSingleton<IKillSwitchService, KillSwitchService>()
 			.AddSingleton<DiagnosticsCountersService>();
 	}
 }
