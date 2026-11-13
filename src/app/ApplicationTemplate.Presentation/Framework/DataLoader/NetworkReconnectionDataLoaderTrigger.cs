@@ -1,4 +1,5 @@
 ﻿using System;
+using ApplicationTemplate.DataAccess.PlatformServices;
 using Chinook.DataLoader;
 using MallardMessageHandlers;
 
@@ -12,23 +13,23 @@ namespace ApplicationTemplate;
 public sealed class NetworkReconnectionDataLoaderTrigger : DataLoaderTriggerBase
 {
 	private readonly IDataLoader _dataLoader;
-	private readonly IConnectivityProvider _connectivity;
+	private readonly IConnectivityProvider _connectivityProvider;
 
-	public NetworkReconnectionDataLoaderTrigger(IDataLoader dataLoader, IConnectivityProvider connectivity)
+	public NetworkReconnectionDataLoaderTrigger(IDataLoader dataLoader, IConnectivityProvider connectivityProvider)
 		: base("NetworkReconnection")
 	{
 		_dataLoader = dataLoader ?? throw new ArgumentNullException(nameof(dataLoader));
-		_connectivity = connectivity;
-		_connectivity.ConnectivityChanged += OnConnectivityChanged;
+		_connectivityProvider = connectivityProvider;
+		_connectivityProvider.ConnectivityChanged += OnConnectivityChanged;
 	}
 
 	/// <remarks>
-	/// We should only refresh when <see cref="IDataLoader" /> state is <see cref="NoNetworkException"/> AND network access is <see cref="NetworkAccess.Internet"/>.
+	/// We should only refresh when <see cref="IDataLoader" /> state is <see cref="NoNetworkException"/> AND network access is <see cref="ConnectivityState.Internet"/>.
 	/// </remarks>
 	private void OnConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
 	{
 		if (_dataLoader.State.Error is NoNetworkException &&
-			e.NetworkAccess == NetworkAccess.Internet)
+			e.State == ConnectivityState.Internet)
 		{
 			RaiseLoadRequested();
 		}
@@ -38,13 +39,13 @@ public sealed class NetworkReconnectionDataLoaderTrigger : DataLoaderTriggerBase
 	{
 		base.Dispose();
 
-		_connectivity.ConnectivityChanged -= OnConnectivityChanged;
+		_connectivityProvider.ConnectivityChanged -= OnConnectivityChanged;
 	}
 }
 
 public static class NetworkReconnectionDataLoaderExtensions
 {
-	public static TBuilder TriggerOnNetworkReconnection<TBuilder>(this TBuilder dataLoaderBuilder, IConnectivityProvider connectivity)
+	public static TBuilder TriggerOnNetworkReconnection<TBuilder>(this TBuilder dataLoaderBuilder, IConnectivityProvider connectivityProvider)
 		where TBuilder : IDataLoaderBuilder
-		=> (TBuilder)dataLoaderBuilder.WithTrigger(dataLoader => new NetworkReconnectionDataLoaderTrigger(dataLoader, connectivity));
+		=> (TBuilder)dataLoaderBuilder.WithTrigger(dataLoader => new NetworkReconnectionDataLoaderTrigger(dataLoader, connectivityProvider));
 }
