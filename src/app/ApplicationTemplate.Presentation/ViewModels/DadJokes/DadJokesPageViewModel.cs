@@ -4,6 +4,8 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ApplicationTemplate.Business;
+using ApplicationTemplate.DataAccess;
+using ApplicationTemplate.DataAccess.PlatformServices;
 using Chinook.DataLoader;
 using Chinook.DynamicMvvm;
 using Chinook.SectionsNavigation;
@@ -14,10 +16,16 @@ using Uno;
 
 namespace ApplicationTemplate.Presentation;
 
-public partial class DadJokesPageViewModel : ViewModel
+public sealed class DadJokesPageViewModel : ViewModel
 {
-	[Inject] private IDadJokesService _dadJokesService;
-	[Inject] private ISectionsNavigator _sectionsNavigator;
+	private readonly IDadJokesService _dadJokesService;
+	private readonly ISectionsNavigator _sectionsNavigator;
+
+	public DadJokesPageViewModel()
+	{
+		ResolveService(out _dadJokesService);
+		ResolveService(out _sectionsNavigator);
+	}
 
 	public IDynamicCommand NavigateToFilters => this.GetCommandFromTask(async ct =>
 	{
@@ -67,7 +75,7 @@ public partial class DadJokesPageViewModel : ViewModel
 		void UpdateItemViewModels(IChangeSet<DadJokesQuote> changeSet)
 		{
 			var quotesVMs = Jokes.State.Data;
-			if (quotesVMs != null && quotesVMs.Any())
+			if (quotesVMs != null && quotesVMs.Length != 0)
 			{
 				var addedItems = changeSet.GetAddedItems();
 				var removedItems = changeSet.GetRemovedItems();
