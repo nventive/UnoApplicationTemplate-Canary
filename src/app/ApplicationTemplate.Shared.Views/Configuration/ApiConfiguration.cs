@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
+using ApplicationTemplate.DataAccess.PlatformServices;
 using MallardMessageHandlers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +15,7 @@ public static class ApiConfiguration
 			.AddSingleton<INetworkAvailabilityChecker>(serviceProvider =>
 			{
 				var connectivityProvider = serviceProvider.GetRequiredService<IConnectivityProvider>();
-				return new NetworkAvailabilityChecker(_ => Task.FromResult(connectivityProvider.NetworkAccess is NetworkAccess.Internet));
+				return new NetworkAvailabilityChecker(_ => Task.FromResult(connectivityProvider.State is ConnectivityState.Internet));
 			});
 	}
 
